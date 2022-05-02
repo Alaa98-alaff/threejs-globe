@@ -19,6 +19,11 @@ const sphereGeomatry = new THREE.SphereGeometry(5, 50, 50);
 const sphereMaterial = new THREE.ShaderMaterial({
   vertexShader,
   fragmentShader, // filling in the space between, loop over every pixel between the vertecies and set it color rqual to value
+  uniforms: {
+    globeTexture: {
+      value: new THREE.TextureLoader().load("./img/globe.jpg"),
+    },
+  },
 });
 const sphereMesh = new THREE.Mesh(sphereGeomatry, sphereMaterial);
 scene.add(sphereMesh);

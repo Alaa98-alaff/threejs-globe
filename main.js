@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import gsap from "gsap";
 import vertexShader from "./shaders/vertex.glsl"; // vite vite-plugin-string installed to supprot import
 import fragmentShader from "./shaders/fragment.glsl";
 import atmosphereVertexShader from "./shaders/atmosphereVertex.glsl";
@@ -30,7 +31,6 @@ const sphereMaterial = new THREE.ShaderMaterial({
   },
 });
 const sphereMesh = new THREE.Mesh(sphereGeomatry, sphereMaterial);
-scene.add(sphereMesh);
 
 // create a atmosphere
 const atmosphereGeomatry = new THREE.SphereGeometry(5, 50, 50);
@@ -44,12 +44,30 @@ const atmosphereMesh = new THREE.Mesh(atmosphereGeomatry, atmosphereMaterial);
 atmosphereMesh.scale.set(1.1, 1.1, 1.1);
 scene.add(atmosphereMesh);
 
+const group = new THREE.Group();
+group.add(sphereMesh);
+scene.add(group);
+
 camera.position.z = 15;
+
+const mouse = {
+  x: undefined,
+  y: undefined,
+};
 
 function animate() {
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
-  sphereMesh.rotation.y += 0.001;
+  sphereMesh.rotation.y += 0.002;
+  gsap.to(group.rotation, {
+    x: -mouse.y * 0.3,
+    y: mouse.x * 0.5,
+    duration: 2,
+  });
 }
-
 animate();
+
+addEventListener("mousemove", (event) => {
+  mouse.x = (event.clientX / innerWidth) * 2 - 1;
+  mouse.y = (event.clientX / innerHeight) * 2 - 1;
+});

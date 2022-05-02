@@ -48,6 +48,26 @@ const group = new THREE.Group();
 group.add(sphereMesh);
 scene.add(group);
 
+const starGeomatry = new THREE.BufferGeometry();
+const starMatiral = new THREE.PointsMaterial({ color: 0xffffff });
+
+let starVertices = [];
+
+for (let i = 0; i < 10000; i++) {
+  const x = (Math.random() - 0.5) * 2000;
+  const y = (Math.random() - 0.5) * 2000;
+  const z = -Math.random() * 3000;
+  starVertices.push(x, y, z);
+}
+
+starGeomatry.setAttribute(
+  "position",
+  new THREE.Float32BufferAttribute(starVertices, 3)
+);
+
+const starMesh = new THREE.Points(starGeomatry, starMatiral);
+scene.add(starMesh);
+
 camera.position.z = 15;
 
 const mouse = {

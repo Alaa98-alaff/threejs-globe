@@ -5,18 +5,21 @@ import fragmentShader from "./shaders/fragment.glsl";
 import atmosphereVertexShader from "./shaders/atmosphereVertex.glsl";
 import atmosphereFragmentShader from "./shaders/atmosphereFragment.glsl";
 
+const canvasContainer = document.getElementById("canvasContainer");
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   75,
-  innerWidth / innerHeight,
+  canvasContainer.offsetWidth / canvasContainer.offsetHeight,
   0.1,
   1000
 );
-const renderer = new THREE.WebGLRenderer({ antialias: true }); // antialias => make the border fade with bc
+const renderer = new THREE.WebGLRenderer({
+  antialias: true, // antialias => make the border fade with bc
+  canvas: document.querySelector("canvas"),
+});
 
-renderer.setSize(innerWidth, innerHeight);
+renderer.setSize(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
 renderer.setPixelRatio(devicePixelRatio); // make the shapes smooth & hight resultion
-document.body.append(renderer.domElement);
 
 // create a sphere
 const sphereGeomatry = new THREE.SphereGeometry(5, 50, 50);
@@ -80,7 +83,7 @@ function animate() {
   renderer.render(scene, camera);
   sphereMesh.rotation.y += 0.002;
   gsap.to(group.rotation, {
-    x: -mouse.y * 0.3,
+    x: mouse.y * 0.3,
     y: mouse.x * 0.5,
     duration: 2,
   });
@@ -89,5 +92,5 @@ animate();
 
 addEventListener("mousemove", (event) => {
   mouse.x = (event.clientX / innerWidth) * 2 - 1;
-  mouse.y = (event.clientX / innerHeight) * 2 - 1;
+  mouse.y = (event.clientY / innerHeight) * 2 - 1;
 });
